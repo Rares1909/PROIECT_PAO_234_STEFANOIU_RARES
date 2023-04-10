@@ -30,14 +30,14 @@ public class MainServiceImpl implements MainService {
         System.out.println("Please select some items for the menu by selecting the number (start with 0) and enter -1 when you want to stop");
         System.out.println(food.getItems());
         int item=scan.nextInt();
-        while (item!=-1){
+        while (item!=-1){                           //adaugam mancare in meniu pana cand -1 este introdus
             r2.addFood(food.getItems().get(item));
             item=scan.nextInt();
         }
     }
 
     public void PlaceOrder() throws Exception {
-        Driver driver= employees.getDrivers().poll();
+        Driver driver= employees.getDrivers().poll();       //soferul cu cele mai putine comenzi
         System.out.println(restaurants.getRestaurants());
         System.out.println("Select the number (start with 0) of the restaurant");
 
@@ -50,7 +50,7 @@ public class MainServiceImpl implements MainService {
         Order order;
 
         while(!valid)
-        {   int f= scan.nextInt();
+        {   int f= scan.nextInt();                  //adaugam mancare pana este introuds -1
             while(f!=-1) {
             items.add(restaurants.getRestaurants().get(nr).getItem(f));
             f = scan.nextInt();
@@ -58,7 +58,7 @@ public class MainServiceImpl implements MainService {
         try{
             order = new Order(restaurants.getRestaurants().get(nr), driver,items);
             orders.addOrder(order);
-            valid=true;
+            valid=true;                                 //verificam daca pretul minim este atins
             driver.addOrder(order);
             employees.addEmployee(driver);
             System.out.println("Your order will cost "+order.calculate_price()+". The driver is "+driver.getName());}

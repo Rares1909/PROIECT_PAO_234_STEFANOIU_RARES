@@ -9,12 +9,12 @@ import java.util.Locale;
 public class EmployeeValidation {
     public static  boolean Experience(Employee e){
         if(e.getExperience()>2)
-            return true;
+            return true;            //experienta minima 2 ani
         else
             return false;
     }
 
-    public static boolean Age(Employee e){
+    public static boolean Age(Employee e){              //varsta minima 18 ani
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(e.getBirthdate());
         if(LocalDate.now().getYear() - calendar.get(Calendar.YEAR) < 18)

@@ -15,14 +15,14 @@ public class EmployeeServiceImpl implements EmployeesService {
     private static SortedSet employees=new TreeSet(new Comparator<Employee>() {
         public int compare(Employee emp1, Employee emp2) {
             return emp1.getName().compareTo(emp2.getName());
-        }
+        }   //angajati sortati in ordine alfabetica
     });
     private static PriorityQueue<Driver> drivers=new PriorityQueue<>(new Comparator<Driver>() {
         @Override
         public int compare(Driver o1, Driver o2) {
             return Integer.compare(o1.getOrders().size(),o2.getOrders().size());
         }
-    });
+    });     //soferi sortati in functie de nr de comenzi
     @Override
     public void addEmployee(Employee employee) throws Exception{
         boolean valid=true;

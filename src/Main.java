@@ -7,6 +7,7 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+        //clasele service
         FoodService food=new FoodServiceImpl();
         RestaurantService restaurants=new RestaurantServiceImpl();
         EmployeesService employees=new EmployeeServiceImpl();
@@ -27,9 +28,9 @@ public class Main {
 
 
         employees.addEmployee(new Driver("Marius",2000, new Date(99,9,19),
-                1,"Dacia",null));
+                1,"Dacia",null));       //not enough experience
         employees.addEmployee(new Driver("Radu",2000, new Date(118,9,19),
-                3,"Dacia",null));
+                3,"Dacia",null));       //invalid birth date
 
         employees.addEmployee(new Driver("Marius",2000, new Date(99,9,19),
                 3,"Dacia",null));
@@ -51,7 +52,6 @@ public class Main {
 
         System.out.println("Hello Customer! Please make an order");
         main.PlaceOrder();
-
 
 
     }
