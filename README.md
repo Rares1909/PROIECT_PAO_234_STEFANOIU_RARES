@@ -1,6 +1,6 @@
 Actiuni:
 
-* Adaugarea restaurantelor, angajatilor(obiecte de tipul driver si cook), comenzilor sau feluri de mancare (obiecte de tipul pasta,pizza,burger)
+* Adaugarea restaurantelor, angajatilor(obiecte de tipul driver si cook), comenzilor sau felurilor de mancare (obiecte de tipul pasta,pizza,burger)
 
 
 * Modificarea atributelor acestor clase (setteri si getteri)
