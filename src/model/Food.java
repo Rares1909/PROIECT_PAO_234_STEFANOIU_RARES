@@ -41,6 +41,6 @@ public abstract class Food {
         return    name  +
                 " {price=" + price +
                 ", grams=" + grams
-                ;
-    }
+                ;}
+
 }

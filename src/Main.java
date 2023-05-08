@@ -3,16 +3,23 @@ import Service.Impl.*;
 import Util.*;
 import model.*;
 
+import java.io.File;
 import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         //clasele service
-        FoodService food=new FoodServiceImpl();
-        RestaurantService restaurants=new RestaurantServiceImpl();
-        EmployeesService employees=new EmployeeServiceImpl();
-        OrderInterface orders=new OrderServiceImpl();
-        MainService main= new MainServiceImpl();
+        FoodService food= FoodServiceImpl.getInstance();
+        RestaurantService restaurants= RestaurantServiceImpl.getInstance();
+        EmployeesService employees= EmployeeServiceImpl.getInstance();
+        OrderInterface orders= OrderServiceImpl.getInstance();
+        MainService main= MainServiceImpl.getInstance();
+
+        restaurants.load();
+        orders.load();
+        employees.load();
+
+
 
         food.addItem(new Pizza("Pepperoni",8,400, Arrays.asList(PizzaToppings.Pepperoni,PizzaToppings.Cheese)));
         food.addItem(new Pasta("Bolognese",7,300, Sauce.Bolognese,Arrays.asList(PastaIngredients.Parmesan)));
@@ -20,10 +27,10 @@ public class Main {
                 ,BurgerIngredients.onions)));
 
 
-        Restaurant r1=new Restaurant("Italiano","Universitate",null);
-        r1.addFood(food.getItems().get(0));
-        r1.addFood(food.getItems().get(1));
-        restaurants.addRestaurant(r1);
+
+
+
+
 
 
 
@@ -38,9 +45,11 @@ public class Main {
                 3,"Dacia",null));
         employees.addEmployee(new Driver("Mihai",2000, new Date(99,9,19),
                 3,"Dacia",null));
-        Cook c1=(new Cook("Andrei",3000,new Date(90,10,12),5, Rank.Intermediate,r1));
+        Cook c1=(new Cook("Andrei",3000,new Date(90,10,12),5, Rank.Intermediate,restaurants.getRestaurants().get(0)));
         c1.IncreaseRank();
         employees.addEmployee(c1);
+
+        //System.out.println(employees.getDrivers());
 
 
         System.out.println(employees.getEmployees());
@@ -53,6 +62,12 @@ public class Main {
         System.out.println("Hello Customer! Please make an order");
         main.PlaceOrder();
 
+
+        employees.write();
+        orders.write();
+        restaurants.write();
+
+        main.Write();
 
     }
 }

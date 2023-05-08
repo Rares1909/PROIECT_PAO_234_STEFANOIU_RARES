@@ -1,4 +1,5 @@
 package Service.Impl;
+import java.time.Instant;
 
 import Service.*;
 import exception.InvalidOrder;
@@ -7,25 +8,55 @@ import model.Food;
 import model.Order;
 import model.Restaurant;
 
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
 public class MainServiceImpl implements MainService {
-    private FoodService food=new FoodServiceImpl();
-    private RestaurantService restaurants=new RestaurantServiceImpl();
-    private EmployeesService employees=new EmployeeServiceImpl();
-    private OrderInterface orders=new OrderServiceImpl();
+    private static MainServiceImpl instance=null;
+
+    private static FileWriter fw;
+    final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    private static String out="";
+
+    private FoodService food=FoodServiceImpl.getInstance();
+    private RestaurantService restaurants= RestaurantServiceImpl.getInstance();
+    private EmployeesService employees=EmployeeServiceImpl.getInstance();
+    private OrderInterface orders=OrderServiceImpl.getInstance();
     private  Scanner scan= new Scanner(System.in);
-    public void AddRestaurant(){
+
+    private MainServiceImpl() throws IOException {
+        fw = new FileWriter("src\\Util\\Audit.csv",false);
+    }
+
+    public static MainServiceImpl getInstance() throws IOException {
+        if(instance==null)
+            instance=new MainServiceImpl();
+        return instance;
+    }
+
+    public void Audit(String s) throws IOException {
+        out+=s+ ','+formatter.format(LocalDateTime.now())+"\n";
+
+    }
+    public void Write() throws IOException {
+        fw.write(out);
+        fw.close();
+    }
+    public void AddRestaurant() throws IOException {
         System.out.println("Name: ");
         String name= scan.nextLine();
         System.out.println("Adress: ");
         String address=scan.nextLine();
 
         Restaurant r2=new Restaurant(name,address,null);
-        restaurants.addRestaurant(r2);
 
         System.out.println("Please select some items for the menu by selecting the number (start with 0) and enter -1 when you want to stop");
         System.out.println(food.getItems());
@@ -34,10 +65,12 @@ public class MainServiceImpl implements MainService {
             r2.addFood(food.getItems().get(item));
             item=scan.nextInt();
         }
+        Audit("Input restaurant");
     }
 
     public void PlaceOrder() throws Exception {
-        Driver driver= employees.getDrivers().poll();       //soferul cu cele mai putine comenzi
+        Driver driver= employees.getDrivers().poll();
+        employees.getEmployees().remove(driver);//soferul cu cele mai putine comenzi
         System.out.println(restaurants.getRestaurants());
         System.out.println("Select the number (start with 0) of the restaurant");
 
@@ -56,7 +89,7 @@ public class MainServiceImpl implements MainService {
             f = scan.nextInt();
         }
         try{
-            order = new Order(restaurants.getRestaurants().get(nr), driver,items);
+            order = new Order(restaurants.getRestaurants().get(nr),items);
             orders.addOrder(order);
             valid=true;                                 //verificam daca pretul minim este atins
             driver.addOrder(order);
@@ -65,5 +98,6 @@ public class MainServiceImpl implements MainService {
         catch(InvalidOrder e){
             System.out.println(e);}
         }
+        Audit("Place Order");
     }
 }

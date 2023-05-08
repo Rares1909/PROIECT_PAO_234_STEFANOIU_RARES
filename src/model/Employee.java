@@ -6,8 +6,9 @@ public  abstract class  Employee {
     protected String name;
     private int salary;
 
-    private final Date birthdate;
+    private  Date birthdate;
     private int experience;
+    public Employee(){}
 
     public Employee(String name, int salary, Date birthdate, int experience) {
         this.name = name;
@@ -41,8 +42,21 @@ public  abstract class  Employee {
         return experience;
     }
 
+    public void setBirthdate(Date birthdate) {
+        this.birthdate = birthdate;
+    }
+
     public void setExperience(int experience) {
         this.experience = experience;
     }
 
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "name='" + name + '\'' +
+                ", salary=" + salary +
+                ", birthdate=" + birthdate +
+                ", experience=" + experience +
+                '}';
+    }
 }
