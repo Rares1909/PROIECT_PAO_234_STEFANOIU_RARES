@@ -107,12 +107,12 @@ public class EmployeeServiceImpl implements EmployeesService {
     public void read(Employee e) throws Exception {     //citim datele intr-un obiect
         OrderInterface orders=OrderServiceImpl.getInstance();
         RestaurantService restaurants=RestaurantServiceImpl.getInstance();
-        if(!dsc.hasNext())
-            return;
-        if(!csc.hasNext())
-            return;                 //verificam daca este driver sau cook pentru a lua datele din fisierul corect
+
+                         //verificam daca este driver sau cook pentru a lua datele din fisierul corect
 
         if (e instanceof Driver) {
+            if(!dsc.hasNext())
+                return;
             String lined=dsc.next();
             String [] dline=lined.split(",");
             e.setName(dline[0]);
@@ -132,6 +132,8 @@ public class EmployeeServiceImpl implements EmployeesService {
             }
         }
         if (e instanceof Cook){
+            if(!csc.hasNext())
+                return;
             String linec= csc.next();
             String [] cline=linec.split(",");
             e.setName(cline[0]);
