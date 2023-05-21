@@ -87,9 +87,10 @@ public class EmployeeDatabase {
                 ((Driver) e).setCar(resultSet.getString("car"));
                 Queue<Order> orders = new LinkedList<>();
                 String[] s = resultSet.getString("orders").split(";");
+                if(!s[0].isEmpty()){
                 for (String nr : s)
                     orders.add(orders_service.getallOrders().get(Integer.valueOf(nr)));
-                ((Driver) e).setOrders(orders);
+                ((Driver) e).setOrders(orders);}
 
                 employeesService.addEmployee(e);
 
