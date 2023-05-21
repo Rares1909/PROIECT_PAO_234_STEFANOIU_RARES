@@ -125,10 +125,13 @@ public class EmployeeServiceImpl implements EmployeesService {
             e.setBirthdate(new Date(an - 1900, luna-1, zi));
             e.setExperience(Integer.valueOf((dline[3])));
             ((Driver) e).setCar(dline[4]);
-            int i=5;
-            while(i<dline.length){
-                ((Driver) e).addOrder(orders.getallOrders().get(Integer.valueOf(dline[i])));
-                i+=1;           //in fisier se afla indicele fiecarei comenzi
+            if(dline.length==6) {
+                String[] fk = dline[5].split(";");
+                int i = 0;
+                while (i < fk.length) {
+                    ((Driver) e).addOrder(orders.getallOrders().get(Integer.valueOf(fk[i])));
+                    i += 1;           //in fisier se afla indicele fiecarei comenzi
+                }
             }
         }
         if (e instanceof Cook){
@@ -158,12 +161,18 @@ public class EmployeeServiceImpl implements EmployeesService {
         FileWriter fw = new FileWriter("src\\Util\\Drivers.csv",false);
         FileWriter gw=new FileWriter("src\\Util\\Cooks.csv",false);
         for(Employee e: employees){
+            int ok=1;
             String s=e.getName()+','+Integer.toString(e.getSalary())+','+df.format(e.getBirthdate())+','+Integer.toString(e.getExperience())+',';
             if (e instanceof Driver) {
                 s += ((Driver) e).getCar();
                 if(((Driver) e).getOrders()!=null)
-                    {while(!((Driver) e).getOrders().isEmpty()){
-                        s+=','+Integer.toString(((Driver) e).getOrders().poll().getId());
+                    {   s+=',';
+                        while(!((Driver) e).getOrders().isEmpty()){
+                         if(ok==1)
+                             ok=0;
+                         else
+                             s+=';';
+                        s+=Integer.toString(((Driver) e).getOrders().poll().getId());
                     }   //pentru fiecare comanda retinem ca atribut indicele din vectorul de comenzi
                     }
                 fw.write(s);

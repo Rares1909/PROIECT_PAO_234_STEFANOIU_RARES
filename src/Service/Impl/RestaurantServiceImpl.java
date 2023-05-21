@@ -61,33 +61,12 @@ public class RestaurantServiceImpl implements RestaurantService {
        String [] rline=line.split(",");
        r.setName(rline[0]);
        r.setaddress(rline[1]);
-       int j=2;
-       while(j< rline.length){
-           String [] food=rline[j].split(" ");
-           String type=food[3];
-           String name=food[0];
-           int price=Integer.valueOf(food[1]);
-           int grams=Integer.valueOf(food[2]);
-           List<PizzaToppings> pizzaToppings=new ArrayList<>();
-           List<BurgerIngredients> burgerIngredients=new ArrayList<>();
-           List<PastaIngredients> pastaIngredients=new ArrayList<>();
-           if(type.contentEquals("Pizza")){
-               for(int i=4;i< food.length;i++)
-                   pizzaToppings.add(PizzaToppings.valueOf(food[i]));
-               r.addFood(new Pizza(name,price,grams,pizzaToppings));}
-           if(type.contentEquals("Burger")){
-               for(int i=4;i< food.length;i++)
-                   burgerIngredients.add(BurgerIngredients.valueOf(food[i]));
-               r.addFood(new Burger(name,price,grams,burgerIngredients));}
-           if(type.contentEquals("Pasta")) {
-               Sauce sauce=Sauce.valueOf(food[4]);
-               for(int i=5;i< food.length;i++)
-                   pastaIngredients.add(PastaIngredients.valueOf(food[i]));
-               r.addFood(new Pasta(name,price,grams,sauce,pastaIngredients));
+       String [] fv=rline[2].split(";");
+       int j=0;
+       while(j< fv.length){
+           r.addFood(Food.ToFood(fv[j]));
+           j+=1;}
 
-           }
-           j+=1;
-       }
        }
 
 
@@ -97,23 +76,15 @@ public class RestaurantServiceImpl implements RestaurantService {
         RestaurantService orders=RestaurantServiceImpl.getInstance();
         String s="";
         for(Restaurant r:restaurants){
-            s=r.getName()+','+r.getaddress();
+            int ok=1;
+            s=r.getName()+','+r.getaddress()+',';
             for(Food f:r.getMenu())
             {
-                s += ',' + f.getName()+ ' ' + f.getPrice() + ' ' + f.getGrams();
-                if(f instanceof Pizza)
-                {s+=' '+"Pizza";
-                    for(int j=0;j<((Pizza) f).getToppings().toArray().length;j++)
-                        s+=' '+((Pizza) f).getToppings().get(j).toString();}
-                if(f instanceof Burger)
-                {s+=' '+"Burger";
-                    for(int j=0;j<((Burger) f).getIngredients().toArray().length;j++)
-                        s+=' '+((Burger) f).getIngredients().get(j).toString();}
-                if(f instanceof Pasta){
-                    s+=' '+"Pasta";
-                    s+=' '+((Pasta) f).getSauce().toString();
-                    for(int j=0;j<((Pasta) f).getExtratoppings().toArray().length;j++)
-                        s+=' '+((Pasta) f).getExtratoppings().get(j).toString();}
+                if (ok==1)
+                    ok=0;
+                else
+                    s+=';';
+                s+=Food.ToFile(f);
             }
             fw.write(s);
             fw.write("\n");

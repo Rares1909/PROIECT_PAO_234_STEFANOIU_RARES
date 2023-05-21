@@ -69,31 +69,10 @@ public class OrderServiceImpl implements OrderInterface {
         RestaurantService restaurants=RestaurantServiceImpl.getInstance();
         o.setRestaurant(restaurants.getRestaurants().get(Integer.valueOf(oline[0])));
         List<Food>items=new ArrayList<>();
-        int j=1;
-        while(j<oline.length){
-            String [] food=oline[j].split(" ");     //fiecare fel de mancare este separat prin virgula,iar atributele lui prin spatiu
-            String type=food[3];
-            String name=food[0];
-            int price=Integer.valueOf(food[1]);
-            int grams=Integer.valueOf(food[2]);
-            List<PizzaToppings> pizzaToppings=new ArrayList<>();
-            List<BurgerIngredients> burgerIngredients=new ArrayList<>();
-            List<PastaIngredients> pastaIngredients=new ArrayList<>();
-                if(type.contentEquals("Pizza")){        //transformam din string in tipul dorit de ingredient
-                    for(int i=4;i< food.length;i++)
-                        pizzaToppings.add(PizzaToppings.valueOf(food[i]));
-                items.add(new Pizza(name,price,grams,pizzaToppings));}
-                if(type.contentEquals("Burger")){
-                    for(int i=4;i< food.length;i++)
-                        burgerIngredients.add(BurgerIngredients.valueOf(food[i]));
-                items.add(new Burger(name,price,grams,burgerIngredients));}
-                if(type.contentEquals("Pasta")) {
-                    Sauce sauce=Sauce.valueOf(food[4]);
-                    for(int i=5;i< food.length;i++)
-                        pastaIngredients.add(PastaIngredients.valueOf(food[i]));
-                    items.add(new Pasta(name,price,grams,sauce,pastaIngredients));
-
-                }
+        String [] fv=oline[1].split(";");
+        int j=0;
+        while(j<fv.length){
+                items.add(Food.ToFood(fv[j]));
                 j+=1;
         }
         o.setFood(items);
@@ -106,23 +85,14 @@ public class OrderServiceImpl implements OrderInterface {
         OrderInterface orders=OrderServiceImpl.getInstance();
         String s="";
         for(Order o:orders.getallOrders()){
-            s=Integer.toString(o.getRestaurant().getId());
+            int ok=1;
+            s=Integer.toString(o.getRestaurant().getId())+',';
             for(int i=0;i<o.getFood().toArray().length;i++) {
-                s += ',' + o.getFood().get(i).getName() + ' ' + o.getFood().get(i).getPrice() + ' ' + o.getFood().get(i).getGrams();
-                Food f=o.getFood().get(i);
-                if(f instanceof Pizza)
-                {s+=' '+"Pizza";        //scriem si tipul pentru a stii in ce transformam ingredientele la citire
-                    for(int j=0;j<((Pizza) f).getToppings().toArray().length;j++)
-                        s+=' '+((Pizza) f).getToppings().get(j).toString();}  //transformam in string
-                if(f instanceof Burger)
-                {s+=' '+"Burger";
-                    for(int j=0;j<((Burger) f).getIngredients().toArray().length;j++)
-                        s+=' '+((Burger) f).getIngredients().get(j).toString();}
-                if(f instanceof Pasta){
-                    s+=' '+"Pasta";
-                    s+=' '+((Pasta) f).getSauce().toString();
-                    for(int j=0;j<((Pasta) f).getExtratoppings().toArray().length;j++)
-                        s+=' '+((Pasta) f).getExtratoppings().get(j).toString();}
+                if(ok==1)
+                    ok=0;
+                else
+                    s+=';';
+                s +=Food.ToFile(o.getFood().get(i));
             }
             fw.write(s);
             fw.write("\n");

@@ -94,6 +94,10 @@ public class Order {
 
     }
 
+    public void addFood(Food f){
+        this.food.add(f);
+    }
+
     @Override
     public String toString() {
         return "Order{" +
