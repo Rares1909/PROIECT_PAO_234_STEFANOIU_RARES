@@ -3,8 +3,7 @@ Actiuni:
 * Adaugarea restaurantelor, angajatilor(obiecte de tipul driver si cook), comenzilor sau felurilor de mancare (obiecte de tipul pasta,pizza,burger)
 
 
-* Modificarea atributelor acestor clase (setteri si getteri)
-
+* Obtinerea soferului unei comenzi
 
 * Afisarea tuturor restaurantelor, felurilor de mancare, angajatiilor si a comenzilor
 
